@@ -2,11 +2,16 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
-
+    <title>QR Scanner</title>
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <h1>QR Scanner</h1>
+    <div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
+    <canvas id="canvas" hidden></canvas>
+    <div id="qrData" hidden></div>
+    <div id="errors" hidden>
+      Error:
+      <p id="errorMessage"></p>
+    </div>
   </body>
 </html>

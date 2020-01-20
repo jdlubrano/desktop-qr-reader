@@ -1,0 +1,11 @@
+#errors {
+  background-color: #ffcdd2;
+  border-radius: 1em;
+  padding: 1em;
+  color: #b71c1c;
+}
+
+#qrData {
+  padding: 1em;
+  text-align: center;
+}

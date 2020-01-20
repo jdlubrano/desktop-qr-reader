@@ -1,8 +1,8 @@
 {
   "name": "desktop-qr",
   "productName": "desktop-qr",
-  "version": "1.0.0",
-  "description": "My Electron application description",
+  "version": "0.1.0",
+  "description": "A desktop app for reading QR codes and opening URLs",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
@@ -32,14 +32,6 @@
           "platforms": [
             "darwin"
           ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
         }
       ],
       "plugins": [
@@ -76,6 +68,7 @@
     "style-loader": "^0.23.1"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "jsqr": "^1.2.0"
   }
 }
