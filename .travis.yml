@@ -32,4 +32,4 @@ after_success: if test -n "$TRAVIS_TAG"; then yarn run publish; fi
 branches:
   only:
     - master
-    - ^v\d+\.\d+\.\d+
+    - /^v\d+\.\d+\.\d+/

@@ -12,7 +12,7 @@ cache:
 branches:
   only:
     - master
-    - ^v\d+\.\d+\.\d+
+    - /^v\d+\.\d+\.\d+/
 
 install:
   - ps: Install-Product node $env:nodejs_version $env:platform
