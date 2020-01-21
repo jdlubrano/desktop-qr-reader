@@ -1,5 +1,6 @@
 import jsQR from 'jsqr';
 import shell from 'electron';
+import { isWebUri } from 'valid-url';
 
 import './qr-reader.css';
 
@@ -25,9 +26,8 @@ function stopCamera() {
   video.srcObject = null;
 }
 
-// TODO
 function isUrl(url) {
-  return false;
+  return isWebUri(url);
 }
 
 function openUrl(url) {

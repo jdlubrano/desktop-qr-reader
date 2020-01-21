@@ -85,6 +85,7 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
-    "jsqr": "^1.2.0"
+    "jsqr": "^1.2.0",
+    "valid-url": "^1.0.9"
   }
 }
