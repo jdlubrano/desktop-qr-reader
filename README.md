@@ -19,3 +19,12 @@ and is bundled with [Webpack](https://www.electronforge.io/templates/webpack-tem
 ```
 yarn make
 ```
+
+## Release Process
+
+```
+yarn version --new-version x.x.x
+git push
+git push --tags
+# CI will push binaries for Linux and Windows
+```
