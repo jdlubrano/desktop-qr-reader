@@ -1,29 +1,30 @@
 platform:
-- x64
+  - x64
 
 environment:
   nodejs_version: "8"
 
 cache:
-- '%APPDATA%\npm-cache'
-- '%USERPROFILE%\.electron'
-- node_modules
+  - '%APPDATA%\npm-cache'
+  - '%USERPROFILE%\.electron'
+  - node_modules
 
 branches:
   only:
-  - master
+    - master
+    - ^v\d+\.\d+\.\d+
 
 install:
-- ps: Install-Product node $env:nodejs_version $env:platform
-- set PATH=%APPDATA%\npm;%PATH%
-- npm install
-- npm update
+  - ps: Install-Product node $env:nodejs_version $env:platform
+  - set PATH=%APPDATA%\npm;%PATH%
+  - npm install
+  - npm update
 
 test_script:
-- node --version
-- yarn --version
-- yarn run lint
-- if %APPVEYOR_REPO_TAG% EQU false yarn run make
+  - node --version
+  - yarn --version
+  - yarn run lint
+  - if %APPVEYOR_REPO_TAG% EQU false yarn run make
 
 build_script:
-- IF %APPVEYOR_REPO_TAG% EQU true yarn run publish
+  - IF %APPVEYOR_REPO_TAG% EQU true yarn run publish
