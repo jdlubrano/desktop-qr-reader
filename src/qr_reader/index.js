@@ -1,5 +1,5 @@
 import jsQR from 'jsqr';
-import shell from 'electron';
+import { shell } from 'electron';
 import { isWebUri } from 'valid-url';
 
 import './qr-reader.css';
