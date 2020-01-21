@@ -1,5 +1,7 @@
 # Desktop QR Reader
 
+[![Build Status](https://travis-ci.com/jdlubrano/desktop-qr-reader.svg?branch=master)](https://travis-ci.com/jdlubrano/desktop-qr-reader)
+
 ## Development Setup
 
 ```
