@@ -21,7 +21,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "icon": "qr.ico"
+        "icon": "./icons/qr"
       },
       "makers": [
         {
