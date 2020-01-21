@@ -6,10 +6,11 @@
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
-    "package": "electron-forge package",
+    "lint": "echo \"No linting configured\"",
     "make": "electron-forge make",
+    "package": "electron-forge package",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "test": "echo \"No tests\""
   },
   "keywords": [],
   "author": {
@@ -32,6 +33,18 @@
           "platforms": [
             "darwin"
           ]
+        }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "jdlubrano",
+              "name": "desktop-qr-reader"
+            },
+            "prerelease": true
+          }
         }
       ],
       "plugins": [
