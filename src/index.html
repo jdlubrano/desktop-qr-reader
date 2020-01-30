@@ -5,8 +5,18 @@
     <title>QR Scanner</title>
   </head>
   <body>
-    <h1>QR Scanner</h1>
-    <div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
+    <h1>
+      QR Scanner
+      <small><a href="#" id="switchVideoSource">Switch Video Source</a></small>
+    </h1>
+    <div hidden>
+      <p>Switch Video Source</p>
+      <ul id="videoDevices">
+      </ul>
+    </div>
+    <div id="loadingMessage">
+      🎥 Unable to access video stream (please make sure you have a webcam enabled)
+    </div>
     <canvas id="canvas" hidden></canvas>
     <div id="qrData" hidden></div>
     <div id="errors" hidden>

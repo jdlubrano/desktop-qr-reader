@@ -1,3 +1,12 @@
+h1 small {
+  margin-left: 1em;
+  font-size: 1rem;
+}
+
+h1 small > a {
+  color: gray;
+}
+
 #errors {
   background-color: #ffcdd2;
   border-radius: 1em;
@@ -8,4 +17,12 @@
 #qrData {
   padding: 1em;
   text-align: center;
+}
+
+#videoDevices {
+  padding: 0;
+}
+
+#videoDevices > li {
+  list-style: none;
 }
