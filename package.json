@@ -1,7 +1,7 @@
 {
   "name": "desktop-qr",
   "productName": "desktop-qr",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A desktop app for reading QR codes and opening URLs",
   "main": ".webpack/main",
   "scripts": {
