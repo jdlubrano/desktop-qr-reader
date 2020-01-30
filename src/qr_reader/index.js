@@ -4,33 +4,92 @@ import { isWebUri } from 'valid-url';
 
 import './qr-reader.css';
 
-var video = document.createElement('video');
-var canvasElement = document.getElementById("canvas");
-var canvas = canvasElement.getContext("2d");
-var loadingMessage = document.getElementById("loadingMessage");
-var qrData = document.getElementById("qrData");
+let video = document.createElement('video');
+let canvasElement = document.getElementById("canvas");
+let canvas = canvasElement.getContext("2d");
+let loadingMessage = document.getElementById("loadingMessage");
+let qrData = document.getElementById("qrData");
 
-var openUrls = {};
+let openUrls = {};
+let videoOptions = null;
 
-function startCamera() {
-  navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
-    video.srcObject = stream;
-    video.setAttribute("playsinline", true);
-    video.play();
-    requestAnimationFrame(tick);
+async function getVideoDevices() {
+  let devices = await navigator.mediaDevices.enumerateDevices();
+
+  return devices.filter((device) => {
+    return device.kind.match(/video/i);
   });
 }
 
-function stopCamera() {
+async function getDefaultVideoOptions() {
+  let defaultVideoOptions = { facingMode: { exact: 'environment' } };
+  return defaultVideoOptions;
+}
+
+async function startVideo() {
+  if (videoOptions === null) {
+    videoOptions = await getDefaultVideoOptions();
+  }
+
+  try {
+    hideErrors();
+
+    let stream = await navigator.mediaDevices.getUserMedia({
+      video: videoOptions
+    });
+
+    video.srcObject = stream;
+    video.setAttribute("playsinline", true);
+    video.play();
+
+    requestAnimationFrame(tick);
+  }
+  catch(err) {
+    console.log(err);
+    showError(`${err.name} ${err.message || ''} ${err.constraint}`);
+  }
+}
+
+function stopVideo() {
+  if (video.srcObject === null) {
+    return;
+  }
+
   video.srcObject.getTracks().forEach((track) => track.stop());
   video.srcObject = null;
+}
+
+async function showSwitchVideoSourceInterface() {
+  let videoDevicesList = document.getElementById('videoDevices');
+  videoDevicesList.innerHTML = '';
+
+  let videoDevices = await getVideoDevices();
+
+  videoDevices.forEach((device) => {
+    let listItem = document.createElement('li');
+    let button = document.createElement('button');
+    button.className = 'device-select';
+
+    button.onclick = () => {
+      loadingMessage.innerText = "⌛ Loading video..."
+      videoDevicesList.parentElement.hidden = true;
+      videoOptions = { deviceId: device.deviceId };
+      startVideo();
+    };
+
+    button.innerText = device.label;
+    listItem.appendChild(button);
+    videoDevicesList.appendChild(listItem);
+  });
+
+  videoDevicesList.parentElement.hidden = false;
 }
 
 function isUrl(url) {
   return isWebUri(url);
 }
 
-function openUrl(url) {
+async function openUrl(url) {
   if (openUrls[url]) {
     return;
   }
@@ -38,9 +97,12 @@ function openUrl(url) {
   console.log(`Opening URL ${url}`);
   openUrls[url] = true;
 
-  shell.openExternal(url).finally(() => {
-    setTimeout(() => { delete openUrls[url] }, 1000);
-  });
+  try {
+    await shell.openExternal(url);
+  }
+  finally {
+    setTimeout(() => { delete openUrls[url] }, 2000);
+  }
 }
 
 function readQrCode(canvas) {
@@ -51,6 +113,16 @@ function readQrCode(canvas) {
   });
 
   return code && code.data;
+}
+
+function showError(error) {
+  let errorMessage = document.getElementById("errorMessage");
+  errorMessage.innerText = error;
+  errorMessage.parentElement.hidden = false;
+}
+
+function hideErrors() {
+  document.getElementById("errors").hidden = true;
 }
 
 function tick() {
@@ -67,18 +139,11 @@ function tick() {
     const code = readQrCode(canvas);
 
     if (code) {
-      // drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
-      // drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
-      // drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
-      // drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
-
       if (isUrl(code)) {
-        document.getElementById("errors").hidden = true;
+        hideErrors();
         openUrl(code);
       } else {
-        var errorMessage = document.getElementById("errorMessage");
-        errorMessage.innerText = `Found a QR code with data: ${code}, but that is not a valid URL.`;
-        errorMessage.parentElement.hidden = false;
+        showError(`Found a QR code with data: ${code}, but that is not a valid URL.`);
       }
     } else {
       qrData.innerText = 'No QR code detected';
@@ -88,16 +153,17 @@ function tick() {
   requestAnimationFrame(tick);
 }
 
-function turnOffCameraWhenHidden() {
+function turnOffVideoWhenHidden() {
   if (document['hidden']) {
-    stopCamera();
+    stopVideo();
   } else {
     if (video.srcObject === null) {
-      startCamera();
+      startVideo();
     }
   }
 }
 
-document.addEventListener('visibilitychange', turnOffCameraWhenHidden);
+document.addEventListener('visibilitychange', turnOffVideoWhenHidden);
+document.getElementById('switchVideoSource').onclick = showSwitchVideoSourceInterface;
 
-startCamera();
+startVideo(videoOptions);
