@@ -1,4 +1,5 @@
 import jsQR from 'jsqr';
+import Store from 'electron-store';
 import { shell } from 'electron';
 import { isWebUri } from 'valid-url';
 
@@ -12,6 +13,7 @@ let qrData = document.getElementById("qrData");
 
 let openUrls = {};
 let videoOptions = null;
+let store = new Store();
 
 async function getVideoDevices() {
   let devices = await navigator.mediaDevices.enumerateDevices();
@@ -22,8 +24,12 @@ async function getVideoDevices() {
 }
 
 async function getDefaultVideoOptions() {
-  let defaultVideoOptions = { facingMode: { exact: 'environment' } };
-  return defaultVideoOptions;
+  let defaultVideoOptions = store.get('videoOptions');
+  return defaultVideoOptions || { facingMode: 'environment' };
+}
+
+function saveVideoOptions(videoOptions) {
+  store.set('videoOptions', videoOptions);
 }
 
 async function startVideo() {
@@ -74,6 +80,7 @@ async function showSwitchVideoSourceInterface() {
       loadingMessage.innerText = "⌛ Loading video..."
       videoDevicesList.parentElement.hidden = true;
       videoOptions = { deviceId: device.deviceId };
+      saveVideoOptions(videoOptions);
       startVideo();
     };
 
