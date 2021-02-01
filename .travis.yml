@@ -1,5 +1,5 @@
 language: node_js
-node_js: "8"
+# node_js: "12"
 
 os:
 - linux
@@ -31,5 +31,5 @@ after_success: if test -n "$TRAVIS_TAG"; then yarn run publish; fi
 
 branches:
   only:
-    - master
+    - main
     - /^v\d+\.\d+\.\d+/
