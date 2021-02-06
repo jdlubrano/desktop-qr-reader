@@ -1,4 +1,4 @@
-name: Electron Make
+name: Electron Build
 
 on:
   push:
